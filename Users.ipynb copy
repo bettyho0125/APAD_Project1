@@ -1,0 +1,212 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 58,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import sqlite3\n",
+    "import re\n",
+    "db=sqlite3.connect(\"/Users/peihsinho/sqlite/db/Playtime.db\")\n",
+    "cursor = db.cursor()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 69,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<sqlite3.Cursor at 0x10d1d38f0>"
+      ]
+     },
+     "execution_count": 69,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "cursor.execute('''\n",
+    "    CREATE TABLE users(uid INTEGER PRIMARY KEY AUTOINCREMENT, uname TEXT,\n",
+    "                       phone TEXT, email TEXT, password TEXT, gender TEXT, location TEXT, admin BOOLEAN)\n",
+    "''')\n",
+    "\n",
+    "## delete the table\n",
+    "# cursor.execute('''DROP TABLE users''')\n",
+    "# db.commit()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 70,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "db.commit()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 71,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Enter your name: dfghjk\n",
+      "Enter your phone: 3456789\n",
+      "[('dfghjk', '3456789', 'xcvbnm', '123', 'F', 'tx', True)]\n"
+     ]
+    }
+   ],
+   "source": [
+    "##create admin first\n",
+    "def addAdmin(uname, phone, email, password, gender, location):\n",
+    "    admin = True\n",
+    "    value = [(uname, phone, email, password, gender, location, admin)]\n",
+    "    print(value)\n",
+    "#     cursor.execute('''INSERT INTO users(uname, phone, email, password, gender, location, admin) \n",
+    "#                   VALUES(:uname, :phone, :email, :password, :gender, :location, :admin)''',\n",
+    "#                 {'uname': uname, 'phone': phone, 'email': email, 'password': password, 'gender': gender, \n",
+    "#                  'location': location, 'admin':admin})\n",
+    "    \n",
+    "    cursor.executemany('''INSERT INTO users(uname, phone, email, password, gender, location, admin) \n",
+    "                  VALUES(?, ?, ?, ?, ?, ?, ?)''', value)\n",
+    "    \n",
+    "def checkPhone():\n",
+    "    phone = input(\"Enter your phone: \")\n",
+    "    print(phone)\n",
+    "    print(len(phone))\n",
+    "    print(phone.isdigit())\n",
+    "    if len(phone) == 10 and phone.isdigit():\n",
+    "        print(phone)\n",
+    "        return phone\n",
+    "    else:\n",
+    "        print(\"please enter again\")\n",
+    "        checkPhone()\n",
+    "\n",
+    "def checkEmail(email):\n",
+    "    regex = '\\w+[.|\\w]\\w+@\\w+[.]\\w+[.|\\w+]\\w+'\n",
+    "    print(re.search(regex, email))\n",
+    "    # if !(re.match(regex, email)):\n",
+    "    #     print(\"please enter again\")\n",
+    "    \n",
+    "def checkGender():\n",
+    "    gender = input(\"Enter your gender(F/M): \")\n",
+    "    if gender != 'F' and gender != 'M':\n",
+    "        print(\"please enter again\")\n",
+    "        checkGender()\n",
+    "        print(gender)\n",
+    "    else:\n",
+    "        return gender\n",
+    "    \n",
+    "uname = input(\"Enter your name: \")\n",
+    "phone = input(\"Enter your phone: \")\n",
+    "    \n",
+    "# email = input(\"Enter your email: \")\n",
+    "# checkEmail(email)\n",
+    "email = 'xcvbnm'\n",
+    "    \n",
+    "# password = input(\"Enter your password: \")\n",
+    "password = '123'\n",
+    "# checkGender()\n",
+    "gender = 'F'\n",
+    "# location = input(\"Enter your location: \")\n",
+    "location = 'tx'\n",
+    "\n",
+    "addAdmin(uname, phone, email, password, gender, location);"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 72,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "db.commit()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 73,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Enter your name: nm,\n",
+      "Enter your phone: 098765\n",
+      "Enter your email: sdfghj\n",
+      "Enter your password: dfgh\n",
+      "Enter your gender: jh\n",
+      "Enter your location: hj\n",
+      "[('nm,', '098765', 'sdfghj', 'dfgh', 'jh', 'hj', False)]\n"
+     ]
+    }
+   ],
+   "source": [
+    "def addUser(uname, phone, email, password, gender, location):\n",
+    "    admin = False\n",
+    "    value = [(uname, phone, email, password, gender, location, admin)]\n",
+    "    print(value)\n",
+    "#     cursor.execute('''INSERT INTO users(uname, phone, email, password, gender, location, admin) \n",
+    "#                   VALUES(:uname, :phone, :email, :password, :gender, :location, :admin)''',\n",
+    "#                 {'uname': uname, 'phone': phone, 'email': email, 'password': password, 'gender': gender, \n",
+    "#                  'location': location, 'admin':admin})  \n",
+    "\n",
+    "    cursor.executemany('''INSERT INTO users(uname, phone, email, password, gender, location, admin) \n",
+    "                  VALUES(?, ?, ?, ?, ?, ?, ?)''', value)\n",
+    "    \n",
+    "uname = input(\"Enter your name: \")\n",
+    "phone = input(\"Enter your phone: \")\n",
+    "email = input(\"Enter your email: \")\n",
+    "password = input(\"Enter your password: \")\n",
+    "gender = input(\"Enter your gender: \")\n",
+    "location = input(\"Enter your location: \")\n",
+    "addUser(uname, phone, email, password, gender, location);"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 74,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "db.commit()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
