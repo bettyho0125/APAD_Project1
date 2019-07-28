@@ -25,12 +25,14 @@ tion and capacity
 5. A user can join an event if there is room
 ### 1.3 3. Operations
 Each of these are python functions you must write: 
-1. Add a new user (admin only) 
-2. Add a new venue (admin only) 
-3. Start an event (user or admin on behalf of a user) 
-4. Display timeslot availability at a venue 
-5. Display all venues where a particular timeslot is available 
-6. List events at a venue given date/time 
-7. User joins an event 
-9. Remove an event (admin only)
-... More to come
+1. Add a new user (admin only) -> Pei-Hsin
+2. Add a new venue (admin only) -> Chetna
+3. Start an event (user or admin on behalf of a user) -> Pei-Hsin
+4. Display timeslot availability at a venue -> Chetna
+5. Display all venues where a particular timeslot is available -> Chetna
+6. List events at a venue given date/time -> Pei-Hsin
+7. User joins an event -> Chetna
+8. Remove an event (admin only) -> Pei-Hsin
+9. checkAdmin -> Pei-Hsin
+10. CalculateTimeslots -> Chetna
+11. SingleVenueSingleTimeslotAvailability -> Chetna
